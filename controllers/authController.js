@@ -44,12 +44,38 @@ exports.login  = async function(req,res){
                 })
             }else{
                 let response = error_function({
-                    status :401
+                    status :401 ,
+                    message :"Invalid Credential",
                 })
+                res.status(response.statusCode).send(response);
+                return;
+            }
+        }else{
+            if(!email){
+                let response = error_function({
+                    status :422,
+                    message:"Email is required"
+                });
+                res.status(response.statusCode).send(response); 
+                return;
             }
         }
     } catch (error) {
-        
+        if(process.env.PORT =="Production"){
+            let response = error_function({
+                status :400,
+                message:error
+                ?error.message
+                ?error.message
+                :error
+                :"something went Wrong"
+            })
+            res.status(response.statusCode).send(response);
+            return;
+        }else{
+            let response= error_function({status:400,message:error});
+            res.status(response.statusCode).send(response)
+            return;
+        }   
     }
-
 }
