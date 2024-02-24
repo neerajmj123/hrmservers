@@ -1,7 +1,9 @@
-const success_function = require("../util/response-handler")
-const error_function = require('../util/response-handler')
+const success_function = require("../util/response-handler").success_function;
+const error_function = require('../util/response-handler').error_function;
 const bcrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken")
+const users = require("../db/models/users")
+
 exports.login  = async function(req,res){
     try {
         let email = req.body.email;
@@ -63,8 +65,8 @@ exports.login  = async function(req,res){
     } catch (error) {
         if(process.env.PORT =="Production"){
             let response = error_function({
-                status :400,
-                message:error
+                statusCode :400,
+                message:errorhrm
                 ?error.message
                 ?error.message
                 :error
@@ -73,7 +75,7 @@ exports.login  = async function(req,res){
             res.status(response.statusCode).send(response);
             return;
         }else{
-            let response= error_function({status:400,message:error});
+            let response= error_function({statusCode:400,message:error});
             res.status(response.statusCode).send(response)
             return;
         }   
