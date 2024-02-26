@@ -12,7 +12,8 @@ const corsOptions ={
 }
 app.use(cors(corsOptions));
 
-app.use(authRoutes);
+app.use(authRoutes); 
+app.use(express.json());
 
 // app.get('/', (req, res) => {
 //   res.send('Hello World!')
