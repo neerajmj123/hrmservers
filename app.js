@@ -7,7 +7,10 @@ const dotenv = require('dotenv');
 dotenv.config()
 
 
-app.use(cors());
+const corsOptions ={
+  origin:'http://localhost:5173'
+}
+app.use(cors(corsOptions));
 
 app.use(authRoutes);
 
