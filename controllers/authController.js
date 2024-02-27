@@ -20,7 +20,7 @@ exports.login = async function (req,res) {
             console.log("user", user)
             if (!user) {
                 console.log("Reached here...");
-                let response = error_function({ "statusCode": 400, "message": "Email invalid" })
+                let response = error_function({ statusCode: 400, message: "Email invalid" })
                 res.status(response.statusCode).send(response);
                 return;
             }
