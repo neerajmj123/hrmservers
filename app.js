@@ -6,6 +6,7 @@ const authRoutes = require('./routes/authRoutes');
 const dotenv = require('dotenv');
 dotenv.config()
 
+app.use(express.json());
 
 const corsOptions ={
   origin:'http://localhost:5173'
@@ -13,7 +14,6 @@ const corsOptions ={
 app.use(cors(corsOptions));
 
 app.use(authRoutes); 
-app.use(express.json());
 
 // app.get('/', (req, res) => {
 //   res.send('Hello World!')

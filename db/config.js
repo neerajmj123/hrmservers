@@ -5,7 +5,7 @@ const MONGODB_URI = process.env.MONGODB_URI;
 const MONGODB_NAME=process.env.MONGODB_NAME;
 
 async function connect(){
-    await mongoose.connect(`${MONGODB_URI}`)
+    await mongoose.connect(`${MONGODB_URI}/${MONGODB_NAME}`)
 .then((message)=>{
     console.log("Database connection established")
 })

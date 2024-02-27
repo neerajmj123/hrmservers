@@ -2,29 +2,36 @@ const success_function = require("../util/response-handler").success_function;
 const error_function = require('../util/response-handler').error_function;
 const bcrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken")
-const users = require("../db/models/users")
+const users = require("../db/models/users");
+let dotenv = require('dotenv')
+dotenv.config();
 
-exports.login = async function (req, res) {
+exports.login = async function (req,res) {
     try {
+        
         let email = req.body.email;
+        console.log("email",email);
         let password = req.body.password;
+        console.log("password",password);
+
 
         if (email && password) {
-            let user = await users.findOne({
-                $and: [{ email: email }]
-            })
+            let user = await users.findOne({$and: [{ email: email }]})
             console.log("user", user)
             if (!user) {
-                let response = error_function({ "status": 400, "message": "Email invalid" })
+                console.log("Reached here...");
+                let response = error_function({ "statusCode": 400, "message": "Email invalid" })
                 res.status(response.statusCode).send(response);
                 return;
             }
+
             if (user) {
                 let db_password = user.password;
-                console.log("dbpassword", db_password)
+                console.log("db_password", db_password)
 
                 bcrypt.compare(password, db_password, (error, auth) => {
                     if (auth === true) {
+
                         let access_token = jwt.sign(
                             { user_id: user.user_id },
                             process.env.PRIVATE_KEY,
@@ -74,7 +81,9 @@ exports.login = async function (req, res) {
             }
         }
     } catch (error) {
+        console.log("error : ", error);
         if (process.env.NODE_ENV == "Production") {
+            console.log("Production error catch...")
             let response = error_function({
                 statusCode: 400,
                 message: error
@@ -86,6 +95,7 @@ exports.login = async function (req, res) {
             res.status(response.statusCode).send(response);
             return;
         } else {
+            console.log("Development error catch");
             let response = error_function({ statusCode: 400, message: error });
             res.status(response.statusCode).send(response)
             return;
