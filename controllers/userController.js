@@ -1,17 +1,17 @@
 const users = require('../db/models/users')
-
+const bcrypt = require('bcryptjs');
 const success_function = require('../util/response-handler').success_function;
 const error_function = require('../util/response-handler').error_function;
-const bcrypt = require('bcryptjs')
+const{response}= require('express')
 exports.createUser = async function(req,res){
     try {
         const name = req.body.name;
         const age = req.body.age;
+        const dob = req.body.dob;
         const email = req.body.email;
         const password = req.body.password;
-        const phonenumber = req.body.phonenumber;
+        const phone_no = req.body.phone_no;
         const pincode = req.body.pincode;
-        const dateofbirth = req.body.dateofbirth;
         const isUserExist = await users.findOne({email})
         console.log("User exist",isUserExist);
 
@@ -21,36 +21,37 @@ exports.createUser = async function(req,res){
                 statusCode :400,
                 message :"User already exist",
             })
-            res.status(response.statusCode).send(response)
+            res.status(response.statusCode).send(response.message);
+            return;
         }
         let salt = await bcrypt.genSalt(10);
         console.log("salt",salt)
-        let hashed_password = bcrypt.hashSync(password.salt)
+        let hashed_password = bcrypt.hashSync(password,salt)
         console.log('hashed_password',hashed_password)
         const new_user = await users.create({
             name,
             age,
+            dob,
             email,
             password :hashed_password,
-            phonenumber,
+            phone_no,
             pincode,
-            dateofbirth
         })
         let response_obj ={
             name,
             age,
+            dob,
             email,
             password,
-            phonenumber,
+            phone_no,
             pincode,
-            dateofbirth
 
         }
         if(new_user){
             let response=success_function({
                 statusCode:201,
                 data:new_user,
-                message:"User created succesfully",
+                message:"User Created Succesfully",
             })
             res.status(response.statusCode).send(response);
             return;
