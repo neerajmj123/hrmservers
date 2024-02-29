@@ -1,4 +1,5 @@
 const users = require('../db/models/users')
+const mongoose = require('mongoose')
 const bcrypt = require('bcryptjs');
 const success_function = require('../util/response-handler').success_function;
 const error_function = require('../util/response-handler').error_function;
@@ -73,3 +74,29 @@ exports.createUser = async function(req,res){
         return
     }
 } 
+exports.getuser = async function(req,res){
+    try {
+        const listusers = await users.find();
+        if(listusers && listusers.length>0){
+            const response ={
+                statusCode :200,
+                message :"Success",
+                data:listusers
+            };
+            res.status(200).send(response);
+        }else{
+            const response ={
+                statusCode:404,
+                message:"Users not Found"
+            };
+            res.status(404).send(response);
+        }
+    } catch (error) {
+        console.error("Error fetching user",error);
+        const response={
+            statusCode:500,
+            message:"Internal server error"
+        };
+        res.status(500).send(response)
+    }
+}
