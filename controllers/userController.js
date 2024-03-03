@@ -8,7 +8,6 @@ exports.createUser = async function(req,res){
     try {
         const name = req.body.name;
         const age = req.body.age;
-        const dob = req.body.dob;
         const email = req.body.email;
         const password = req.body.password;
         const phone_no = req.body.phone_no;
@@ -32,7 +31,6 @@ exports.createUser = async function(req,res){
         const new_user = await users.create({
             name,
             age,
-            dob,
             email,
             password :hashed_password,
             phone_no,
@@ -41,7 +39,6 @@ exports.createUser = async function(req,res){
         let response_obj ={
             name,
             age,
-            dob,
             email,
             password,
             phone_no,
@@ -98,5 +95,17 @@ exports.getuser = async function(req,res){
             message:"Internal server error"
         };
         res.status(500).send(response)
+    }
+}
+exports.router=async function(req,res){
+    try {
+        const userId =req.params.userId;
+        const user=await users.findById(userId)
+        if(!user){
+            return res.status(404).json({error:"user not found"})
+        }
+    } catch (error) {
+        console.error('error fetching user details',error)
+        res.status(500).json({error:'server error'})
     }
 }
