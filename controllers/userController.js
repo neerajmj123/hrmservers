@@ -104,8 +104,27 @@ exports.router=async function(req,res){
         if(!user){
             return res.status(404).json({error:"user not found"})
         }
+        res.json(user);
     } catch (error) {
         console.error('error fetching user details',error)
         res.status(500).json({error:'server error'})
+    }
+}
+
+exports .updateUser = async function(req,res){
+    try {
+        const userId = req.params.userId;
+        const updateUser = req.body;
+
+        const user = await users.findById(userId)
+        if(!user){
+            return res.status(404).json({error:"User not found"})
+        }
+        await users.findByIdAndUpdate(userId,updateUser,{new:true});
+        const updatedUser =await users.findById(userId)
+        res.status(200).json({message:"user updated succesfully",user:updatedUser})
+    } catch (error) {
+        console.error("Error updating user details",error);
+        res.status(500).json({error:"server error"})
     }
 }

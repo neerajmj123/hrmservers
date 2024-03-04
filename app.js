@@ -18,7 +18,8 @@ app.use(cors(corsOptions));
 
 app.use(authRoutes); 
 app.use(userRoutes);
-app.use('/getuser',userRoutes)
+app.use('/getuser',userRoutes);
+
 
 // app.get('/', (req, res) => {
 //   res.send('Hello World!')
