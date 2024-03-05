@@ -19,6 +19,7 @@ app.use(cors(corsOptions));
 app.use(authRoutes); 
 app.use(userRoutes);
 app.use('/getuser',userRoutes);
+app.use('/updateUser',userRoutes)
 
 
 // app.get('/', (req, res) => {

@@ -112,19 +112,30 @@ exports.router=async function(req,res){
 }
 
 exports .updateUser = async function(req,res){
+    const userId = req.params.userId;
+    const userdata = req.body;
     try {
-        const userId = req.params.userId;
-        const updateUser = req.body;
-
-        const user = await users.findById(userId)
-        if(!user){
-            return res.status(404).json({error:"User not found"})
+        const updateUser = await users.findByIdAndUpdate(userId,userdata,{new:true});
+        if(updateUser){
+            const response={
+                statusCode:200,
+                message:"user updated succesfully",
+                data:updateUser
+            }
+            res.status(200).send(response)
+        }else{
+            const response = {
+                statusCode : 404,
+                message:"user not found"
+            } ;
+            res.status(404).send(response)
         }
-        await users.findByIdAndUpdate(userId,updateUser,{new:true});
-        const updatedUser =await users.findById(userId)
-        res.status(200).json({message:"user updated succesfully",user:updatedUser})
     } catch (error) {
-        console.error("Error updating user details",error);
-        res.status(500).json({error:"server error"})
+        console.error("Error in updating user",error)
+        const response ={
+            statusCode:500,
+            message:"internal server error"
+        };
+        res.status(500).send(response)
     }
 }
