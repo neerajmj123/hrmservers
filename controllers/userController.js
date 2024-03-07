@@ -23,6 +23,8 @@ exports.createUser = async function (req, res) {
             res.status(response.statusCode).send(response);
             return
         } else {
+
+            let user_type_id ="65bb1a7e13faaff4f7e60714"
             if (phone_no.length !== 10) {
                 let response = error_function({
                     statusCode: 400,
@@ -64,6 +66,8 @@ exports.createUser = async function (req, res) {
                 password: hashed_password,
                 phone_no,
                 pincode,
+                user_type:user_type_id,
+
             })
             let response_obj = {
                 name,

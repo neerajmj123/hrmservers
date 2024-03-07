@@ -51,8 +51,7 @@ exports.login = async function (req, res) {
                 let user = await users.findOne({ $and: [{ email: email }] })
                 console.log("user", user)
                 if (!user) {
-                    console.log("Reached here...");
-                    let response = error_function({ statusCode: 400, message: "Email invalid" })
+                    let response = error_function({ statusCode: 400, message: "User not exist" })
                     res.status(response.statusCode).send(response);
                     return;
                 }
