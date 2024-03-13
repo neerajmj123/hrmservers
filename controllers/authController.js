@@ -42,8 +42,8 @@ exports.login = async function (req, res) {
             let response = error_function({
                 statusCode: 400,
                 message: "validation error",
+                errors:userErrors,
             });
-            response.errors = userErrors;
             res.status(response.statusCode).send(response);
             return;
         } else {
@@ -63,7 +63,7 @@ exports.login = async function (req, res) {
                         if (auth === true) {
 
                             let access_token = jwt.sign(
-                                { user_id: user.user_id },
+                                { user_id: user._id },
                                 process.env.PRIVATE_KEY,
                                 { expiresIn: "1d" }
                             );
