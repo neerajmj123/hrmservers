@@ -42,7 +42,7 @@ exports.createUser = async function (req, res) {
                 res.status(response.statusCode).send(response);
                 return
             }
-
+ 
             const isUserExist = await users.findOne({ email })
             console.log("User exist", isUserExist);
 

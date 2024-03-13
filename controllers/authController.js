@@ -133,3 +133,17 @@ exports.login = async function (req, res) {
         }
     }
 }
+exports.checkRevoked = function(req,res){
+    return new Promise((resolve, reject)=>{
+        const authHeader = req.headers["authorization"]
+        const token = authHeader.split("")[1];
+
+        revokeuser.checkRevoked(token)
+                  .then((message)=>{
+                    resolve(message);
+                  })
+                  .catch((error)=>{
+                    reject(error)
+                  });
+    });
+};
