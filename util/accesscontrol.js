@@ -15,7 +15,7 @@ exports.accesscontrol = async function (accesType, req, res, next) {
             const token = authHeader ? authHeader.split(" ")[1] : null;
             console.log("token", token);
 
-            if (!token) {
+            if (token == null || token == "null"||token=="" || token=="undefined") {
                 let response = error_function({
                     statusCode: 401,
                     message: "invalid access token ",
@@ -35,6 +35,7 @@ exports.accesscontrol = async function (accesType, req, res, next) {
                         } else {
                             let allowed = accesType.split(",")
                                 .map((obj) => controlData[obj]);
+                                
                             console.log("allowed", allowed);
                             console.log("decoded", decoded);
 

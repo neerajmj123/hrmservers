@@ -48,7 +48,8 @@ exports.login = async function (req, res) {
             return;
         } else {
             if (email && password) {
-                let user = await users.findOne({ $and: [{ email: email }] })
+                let user = await users.findOne({
+                      email: email  })
                 console.log("user", user)
                 if (!user) {
                     let response = error_function({ statusCode: 400, message: "User not exist" })

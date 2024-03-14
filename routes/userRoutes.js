@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router();
 const userController = require('../controllers/userController')
 const accesscontrol= require ("../util/accesscontrol").accesscontrol;
+
 const setAccessControl = (accessType)=>{
     return(req,res,next)=>{
         accesscontrol(accessType,req,res,next)

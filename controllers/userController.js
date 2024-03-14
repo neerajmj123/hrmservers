@@ -5,6 +5,9 @@ const success_function = require('../util/response-handler').success_function;
 const error_function = require('../util/response-handler').error_function;
 const { response } = require('express')
 const validation = require('../validation/uservalidation')
+
+
+
 exports.createUser = async function (req, res) {
     try {
 
@@ -25,6 +28,7 @@ exports.createUser = async function (req, res) {
         } else {
 
             let user_type_id ="65bb1a7e13faaff4f7e60714"
+            console.log(user_type_id)
             if (phone_no.length !== 10) {
                 let response = error_function({
                     statusCode: 400,
