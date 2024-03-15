@@ -1,4 +1,4 @@
-exports.sendMail= function(name,email,password){
+exports.setpassword= function(name,email,password){
     return new Promise(async(resolve,reject)=>{
         try {
             let template = `<!DOCTYPE html>

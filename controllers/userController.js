@@ -1,10 +1,11 @@
 const users = require('../db/models/users')
-const mongoose = require('mongoose')
 const bcrypt = require('bcryptjs');
 const success_function = require('../util/response-handler').success_function;
 const error_function = require('../util/response-handler').error_function;
 const { response } = require('express')
 const validation = require('../validation/uservalidation')
+const sendEmail = require('../util/send-email').sendEmail;
+const set_password = require('../util/email-template/setpassword').setpassword
 
 
 
@@ -59,10 +60,24 @@ exports.createUser = async function (req, res) {
                 res.status(response.statusCode).send(response.message);
                 return;
             }
+
+            function generatePassword(length){
+                let charset = "abcdefghijklmopqrstuvwxyzABCDEFGHIJKLMOPRSTUVWXYZ123457890@#$"
+                let password ="";
+                for(var i= 0;i<length;i++){
+                    var randomIndex = Math.floor(Math.random()*charset.length);
+                    password += charset.charAt(randomIndex)
+                }
+                return password;
+            }
+            var randomPassword = generatePassword(12);
+            console.log("Random password",randomPassword);
+
             let salt = await bcrypt.genSalt(10);
             console.log("salt", salt)
-            let hashed_password = bcrypt.hashSync(password, salt)
+            let hashed_password = bcrypt.hashSync(randomPassword, salt)
             console.log('hashed_password', hashed_password)
+
             const new_user = await users.create({
                 name,
                 age,
@@ -83,6 +98,12 @@ exports.createUser = async function (req, res) {
 
             }
             if (new_user) {
+                let emailTemplate = await set_password(
+                    name,
+                    email,
+                    randomPassword
+                );
+                await sendEmail(email,"Password",emailTemplate)
                 let response = success_function({
                     statusCode: 201,
                     data: new_user,

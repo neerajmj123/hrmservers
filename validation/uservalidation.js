@@ -34,9 +34,9 @@ module .exports = async function userValidaion(data){
             errors.unique_email = "Email must be unique";
         }
     }
-    if(validator.isEmpty(data.password)){
-        errors.password="password is required";
-    }
+    // if(validator.isEmpty(data.password)){
+    //     errors.password="password is required";
+    // }
     if(!validator.isNumeric(data.phone_no)){
         errors.phone_no="Phone number required";
     }

@@ -1,15 +1,16 @@
+"use strict"
 const nodemailer = require('nodemailer');
 exports.sendEmail = async function (emails,subject,content){
     return new Promise(async(resolve,reject)=>{
         try {
             if( typeof emails == "object") emails = emails.join(",");
             let transporter = nodemailer.createTransport({
-                Host:sandbox.smtp.mailtrap.io,
-                Port: 2525,
-                secure : 2525 == 465 ? true :false ,
+                host:process.env.EMAIL_HOST,
+                Port:process.env.EMAIL_PORT,
+                secure : process.env.EMAIL_PORT == 465 ? true :false ,
                 auth:{
-                    Username:d6f7f78d506072,
-                    Password:c140997c5ffbf2,
+                    Username:process.env.EMAIL_USER,
+                    Password:process.env.EMAIL_PASSWORD,
                 },
 
             });
