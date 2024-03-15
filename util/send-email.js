@@ -6,11 +6,11 @@ exports.sendEmail = async function (emails,subject,content){
             if( typeof emails == "object") emails = emails.join(",");
             let transporter = nodemailer.createTransport({
                 host:process.env.EMAIL_HOST,
-                Port:process.env.EMAIL_PORT,
-                secure : process.env.EMAIL_PORT == 465 ? true :false ,
+                port:process.env.EMAIL_PORT,
+                secure : process.env.EMAIL_PORT === 465 ? true :false ,
                 auth:{
-                    Username:process.env.EMAIL_USER,
-                    Password:process.env.EMAIL_PASSWORD,
+                    user:process.env.EMAIL_USER,
+                    pass:process.env.EMAIL_PASSWORD,
                 },
 
             });
@@ -22,6 +22,7 @@ exports.sendEmail = async function (emails,subject,content){
             });
             resolve(true);
         } catch (error) {
+            console.error("error in sending email")
             reject(false);
         }
     });

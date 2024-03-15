@@ -25,7 +25,7 @@ exports.createUser = async function (req, res) {
             })
             response.errors = userError;
             res.status(response.statusCode).send(response);
-            return
+            
         } else {
 
             let user_type_id ="65bb1a7e13faaff4f7e60714"
@@ -62,7 +62,7 @@ exports.createUser = async function (req, res) {
             }
 
             function generatePassword(length){
-                let charset = "abcdefghijklmopqrstuvwxyzABCDEFGHIJKLMOPRSTUVWXYZ123457890@#$"
+                let charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPRSTUVWXYZ123457890@#$"
                 let password ="";
                 for(var i= 0;i<length;i++){
                     var randomIndex = Math.floor(Math.random()*charset.length);
@@ -121,7 +121,7 @@ exports.createUser = async function (req, res) {
             }
         }
     } catch (error) {
-        console.log("error:", error);
+        console.log("error:", error.message?error.message:error);
         let response = error_function({
             statusCode: 400,
             message: error.message ? error.message : error,

@@ -35,14 +35,19 @@ exports.setpassword= function(name,email,password){
                     label{
                         color : red;
                     }
-                   
+                    .email{
+                        color : blue;
+                    }
+                   .name{
+                    color :blue;
+                   }
                 </style>
             </head>
             <body>
                 <div class="container">
                     <h1>Your Password</h1>
-                    <p>Dear ${name},</p>
-                    <p>Your email${email},</p>
+                    <p>Dear <label class = name > ${name}</label>,</p>
+                    <p>Your email <label class = email>${email}</label>,</p>
                     <p>Your password <label>${password}</label></p>
                     <p>Best regards,<br> The Team</p>
                 </div>

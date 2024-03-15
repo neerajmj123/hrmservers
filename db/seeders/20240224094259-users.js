@@ -13,7 +13,6 @@ module.exports = {
         age:"10",
         phone_no:"123456789",
         pincode:"680564",
-        dob:"4-2-2003",
         email:"jack@gmail.com",
         password:"$2a$12$1AOqY9dbpdnoOVE9Frm9sek7Pz4g6EFcP7Y12v9a0nM5Xc9FkmLju",//jack@123
         user_type:"65bb1a7d13faaff4f7e60713"
