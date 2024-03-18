@@ -8,7 +8,7 @@ module .exports = async function userValidaion(data){
     data.name=!isEmpty(data.name)?data.name:"";
     data.age=!isEmpty(data.age)?data.age:"";
     data.email = !isEmpty(data.email)?data.email:"";
-    data.password = !isEmpty(data.password)?data.password:"";
+    // data.password = !isEmpty(data.password)?data.password:"";
     data.phone_no =!isEmpty(data.phone_no)?data.phone_no:"";
     data.pincode = !isEmpty(data.pincode)?data.pincode:"";
 
@@ -31,7 +31,7 @@ module .exports = async function userValidaion(data){
     } else {
         let emailCount = await user.countDocuments({ "email": data.email });
         if (Number(emailCount) > 0) {
-            errors.unique_email = "Email must be unique";
+            errors.email = "Email must be unique";
         }
     }
     // if(validator.isEmpty(data.password)){
@@ -43,9 +43,11 @@ module .exports = async function userValidaion(data){
     if(validator.isEmpty(data.pincode)){
         errors.pincode="Pincode is required";
     }
+if(!validator.isNumeric(data.pincode))
+errors.pincode="Pincode is invalid";
 
     return {
         validUser:isEmpty(errors),
-        userError:errors
-    }
+        userError:errors,
+    };
 }

@@ -5,6 +5,8 @@ const jwt = require("jsonwebtoken")
 const users = require("../db/models/users");
 const isEmpty = require('../validation/isEmpty');
 const validator = require('validator');
+const resetpassword = require('../util/email-template/resetpaswword').resetpassword;
+const sendEmail = require('../util/send-email').sendEmail;
 let dotenv = require('dotenv')
 dotenv.config();
 
@@ -38,6 +40,7 @@ exports.login = async function (req, res) {
         const { validUser, userErrors } = await loginValidate(req.body)
         console.log("userValid", validUser);
         console.log("userError", userErrors);
+
         if (!validUser) {
             let response = error_function({
                 statusCode: 400,
@@ -134,6 +137,76 @@ exports.login = async function (req, res) {
         }
     }
 }
+exports.forgetpassword = async function (req,res){
+    try {
+        let email = req.body.email;
+        if(email){
+            let user = await users.findOne({email :email});
+
+            if(user){
+                let resetToken = jwt.sign({user_id:user._id},process.env.PRIVATE_KEY,{expiresIn:"10m"});
+
+                let data = await users.updateOne(
+                    {email:email},
+                    {$set:{password_token : resetToken}}
+                );
+
+                if(data.matchedCount === 1 && data.modifiedCount == 1){
+                    let reset_link = `${process.env.FRONTEND_URL}/reset-password ? token =${resetToken}`;
+                    console.log(user.email)
+
+                    let emailTemplate = await resetpassword(user.name,reset_link);
+                    await sendEmail(email,"forgot password",emailTemplate)
+
+
+                    let response = success_function({
+                        statusCode:200,
+                        message :"email sent successfully"
+                    });
+                    res.status(statusCode).send(response)
+                    return;
+                }else if(data.matchedCount===0){
+                    let response = error_function({
+                        statusCode:404,
+                        message:"user not found",
+                    });
+                    res.status(statusCode).send(response);
+                    return;
+                }else{
+                    let response=error_function({
+                        statusCode:400,
+                        message:"Password reset failed",
+                    });
+                    res.status(statusCode).send(response);
+                    return;
+                }
+            }else{
+                let response=error_function({
+                statusCode:403,
+                message:"forbidden",
+            });
+            res.status(statusCode).send(response);
+            return;
+            }
+        }else{
+            response=error_function({
+                statusCode:422,
+                message:"email is required",
+            });
+            res.status(statusCode).send(response);
+            return;
+        }
+    } catch (error) {
+        let response=error_function({
+                
+            statusCode:400,
+            message:"something went wrong"
+        });
+        res.status(response.statusCode).send(response);
+        return;
+    }
+}
+
 exports.checkRevoked = function(req,res){
     return new Promise((resolve, reject)=>{
         const authHeader = req.headers["authorization"]

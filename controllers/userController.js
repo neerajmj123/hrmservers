@@ -17,6 +17,8 @@ exports.createUser = async function (req, res) {
         const { validUser, userError } = await validation(req.body);
         console.log("valid user ", validUser)
         console.log("usererror", userError)
+        console.log("reached here")
+
 
         if (!validUser) {
             let response = error_function({
@@ -24,19 +26,20 @@ exports.createUser = async function (req, res) {
                 message: "validation error",
             })
             response.errors = userError;
-            res.status(response.statusCode).send(response);
+            return res.status(response.statusCode).send(response);
             
         } else {
 
-            let user_type_id ="65bb1a7e13faaff4f7e60714"
-            console.log(user_type_id)
+            const user_type_id ="65bb1a7e13faaff4f7e60714";
+
+            console.log("user_type_id",user_type_id)
             if (phone_no.length !== 10) {
                 let response = error_function({
                     statusCode: 400,
                     message: 'Phone number must contain 10 numbers'
                 })
-                res.status(response.statusCode).send(response);
-                return
+               return res.status(response.statusCode).send(response);
+                
             }
 
             if (pincode.length !== 6) {
@@ -44,8 +47,7 @@ exports.createUser = async function (req, res) {
                     statusCode: 400,
                     message: 'Pincode must contain 6 numbers'
                 })
-                res.status(response.statusCode).send(response);
-                return
+               return  res.status(response.statusCode).send(response);
             }
  
             const isUserExist = await users.findOne({ email })
@@ -57,8 +59,8 @@ exports.createUser = async function (req, res) {
                     statusCode: 400,
                     message: "User already exist",
                 })
-                res.status(response.statusCode).send(response.message);
-                return;
+               return res.status(response.statusCode).send(response.message);
+                
             }
 
             function generatePassword(length){
