@@ -134,12 +134,23 @@ exports.createUser = async function (req, res) {
 }
 exports.getuser = async function (req, res) {
     try {
-        const listusers = await users.find();
+
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 5;
+
+        const startIndex = (page -1)*limit;
+        const endindex = page*limit;
+
+        const listusers = await users.find().skip(startIndex).limit(limit);
+        const totalUsers = await users.countDocuments();
+
         if (listusers && listusers.length > 0) {
             const response = {
                 statusCode: 200,
                 message: "Success",
-                data: listusers
+                data: listusers,
+                currentpage : page,
+                totalpage : Math.ceil(totalUsers/limit)
             };
             res.status(200).send(response);
         } else {
