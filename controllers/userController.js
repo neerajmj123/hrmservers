@@ -144,11 +144,11 @@ exports.getuser = async function (req, res) {
         const searchQuery = req.query.searchQuery
         let filter = {};
 
-        if(searchQuery){
-            filter={
-                $or :[
-                    { "name" : {$regex : searchQuery,$options : "i"}},
-                    {"emil" :{$regex : searchQuery,$options:"i"}}
+        if (searchQuery) {
+            filter = {
+                $or: [
+                    { "name": { $regex: searchQuery, $options: "i" } },
+                    { "email": { $regex: searchQuery, $options: "i" } } 
                 ]
             };
         }
