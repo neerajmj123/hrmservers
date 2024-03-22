@@ -10,7 +10,7 @@ const setAccessControl = (accesType)=>{
     }
 }
 router.post('/login',setAccessControl('*'),authController.login);
-// router.post('/forgetpassword',setAccessControl('*'),authController.forgetpassword);
+router.post('/forgetpassword',setAccessControl('*'),authController.forgetpassword);
 router.patch('/changePassword',setAccessControl('*'),authController.changePassword);
-// router.patch('/passwordreset',setAccessControl('*'),authController.passwordreset);
+router.patch('/passwordreset',setAccessControl('*'),authController.passwordreset);
 module.exports = router;

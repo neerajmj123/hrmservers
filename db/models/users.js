@@ -28,6 +28,7 @@ const users = new mongoose.Schema({
     password_token :{
         type :String,
     },
+    lastLogin :{type : Date,default:null},
 
     user_type :{type :mongoose.Schema.Types.ObjectId,ref:"user_types"}
 })

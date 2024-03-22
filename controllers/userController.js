@@ -141,8 +141,20 @@ exports.getuser = async function (req, res) {
         const startIndex = (page -1)*limit;
         const endindex = page*limit;
 
-        const listusers = await users.find().skip(startIndex).limit(limit);
-        const totalUsers = await users.countDocuments();
+        const searchQuery = req.query.searchQuery
+        let filter = {};
+
+        if(searchQuery){
+            filter={
+                $or :[
+                    { "name" : {$regex : searchQuery,$options : "i"}},
+                    {"emil" :{$regex : searchQuery,$options:"i"}}
+                ]
+            };
+        }
+
+        const listusers = await users.find(filter).skip(startIndex).limit(limit);
+        const totalUsers = await users.countDocuments(filter);
 
         if (listusers && listusers.length > 0) {
             const response = {
@@ -150,7 +162,7 @@ exports.getuser = async function (req, res) {
                 message: "Success",
                 data: listusers,
                 currentpage : page,
-                totalpage : Math.ceil(totalUsers/limit)
+                totalpage : Math.ceil(totalUsers / limit)
             };
             res.status(200).send(response);
         } else {
